@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A2Z Search — fast, private search across the UCI ICS corpus.">
+  <meta name="theme-color" content="#f8fafc">
+  <title>A2Z Search</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas: #f8fafc;
+      --surface: #ffffff;
+      --surface-soft: #f1f5f9;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #dbe3ef;
+      --brand: #2457d6;
+      --brand-dark: #193ca3;
+      --accent: #f59e0b;
+      --shadow: 0 18px 55px rgba(15, 23, 42, .12);
+      --shadow-soft: 0 7px 24px rgba(15, 23, 42, .08);
+    }
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --canvas: #090d18;
+      --surface: #111827;
+      --surface-soft: #182235;
+      --ink: #f8fafc;
+      --muted: #9aa9bf;
+      --line: #29364d;
+      --brand: #7da2ff;
+      --brand-dark: #a9c0ff;
+      --accent: #fbbf24;
+      --shadow: 0 20px 60px rgba(0, 0, 0, .34);
+      --shadow-soft: 0 8px 26px rgba(0, 0, 0, .24);
+    }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; background: var(--canvas); }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 16% 10%, color-mix(in srgb, var(--brand) 9%, transparent), transparent 26rem),
+        var(--canvas);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .skip-link { position: fixed; left: 12px; top: -60px; z-index: 100; padding: 10px 14px; background: var(--ink); color: var(--surface); border-radius: 10px; }
+    .skip-link:focus { top: 12px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 850; letter-spacing: -.055em; }
+    .brand-mark { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 13px; color: white; background: linear-gradient(135deg, #2457d6, #6941c6); box-shadow: 0 8px 20px rgba(36, 87, 214, .28); font-size: 14px; letter-spacing: -.04em; }
+    .brand-word { font-size: 24px; }
+    .brand-word em { color: var(--brand); font-style: normal; }
+    .icon-button { width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink); cursor: pointer; transition: transform .18s ease, background .18s ease; }
+    .icon-button:hover { transform: translateY(-1px); background: var(--surface-soft); }
+    .topbar { display: none; position: sticky; top: 0; z-index: 20; align-items: center; gap: 24px; min-height: 82px; padding: 14px clamp(18px, 4vw, 52px); border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent); background: color-mix(in srgb, var(--canvas) 88%, transparent); backdrop-filter: blur(18px); }
+    body.results-view .topbar { display: flex; }
+    .topbar .search-shell { max-width: 720px; flex: 1; }
+    .topbar .brand-word { display: none; }
+    .hero { min-height: calc(100vh - 84px); display: grid; align-content: center; justify-items: center; padding: 56px 20px 110px; }
+    body.results-view .hero { display: none; }
+    .hero-inner { width: min(760px, 100%); text-align: center; animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
+    .hero .brand { margin-bottom: 28px; }
+    .hero .brand-mark { width: 62px; height: 62px; border-radius: 19px; font-size: 20px; }
+    .hero .brand-word { font-size: clamp(44px, 9vw, 74px); }
+    .eyebrow { margin: 0 0 12px; color: var(--brand); font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(22px, 4vw, 34px); line-height: 1.16; letter-spacing: -.04em; }
+    .hero-copy { max-width: 580px; margin: 16px auto 30px; color: var(--muted); font-size: 17px; line-height: 1.65; }
+    .search-shell { position: relative; width: 100%; }
+    .search-form { display: flex; align-items: center; gap: 10px; padding: 7px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface); box-shadow: var(--shadow); transition: border-color .2s, box-shadow .2s; }
+    .search-form:focus-within { border-color: color-mix(in srgb, var(--brand) 65%, var(--line)); box-shadow: 0 20px 60px color-mix(in srgb, var(--brand) 16%, transparent); }
+    .search-symbol { margin-left: 10px; color: var(--muted); font-size: 20px; }
+    .search-input { min-width: 0; flex: 1; height: 48px; padding: 0 4px; border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 17px; }
+    .search-input::placeholder { color: color-mix(in srgb, var(--muted) 75%, transparent); }
+    .search-button { height: 46px; padding: 0 22px; border: 0; border-radius: 15px; background: var(--brand); color: white; font-weight: 750; cursor: pointer; transition: transform .18s, background .18s; }
+    .search-button:hover { transform: translateY(-1px); background: var(--brand-dark); }
+    .search-button:active { transform: translateY(0); }
+    .recent { min-height: 72px; margin-top: 24px; }
+    .recent-label { color: var(--muted); font-size: 13px; font-weight: 700; }
+    .chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .chip { padding: 8px 13px; border: 1px solid var(--line); border-radius: 999px; background: color-mix(in srgb, var(--surface) 75%, transparent); color: var(--muted); cursor: pointer; }
+    .chip:hover { color: var(--brand); border-color: var(--brand); }
+    .proof { display: flex; justify-content: center; flex-wrap: wrap; gap: 28px; margin-top: 34px; color: var(--muted); font-size: 13px; }
+    .proof strong { display: block; color: var(--ink); font-size: 17px; }
+    .home-actions { position: fixed; top: 22px; right: 24px; display: flex; gap: 10px; }
+    body.results-view .home-actions { display: none; }
+    .results-layout { display: none; width: min(1120px, calc(100% - 36px)); margin: 0 auto; padding: 34px 0 90px; }
+    body.results-view .results-layout { display: grid; grid-template-columns: minmax(0, 760px) 260px; gap: 72px; }
+    .result-meta { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 40px; margin-bottom: 22px; color: var(--muted); font-size: 13px; }
+    .mode-select { padding: 8px 30px 8px 11px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); }
+    .results-list { display: grid; gap: 30px; }
+    .result-card { min-width: 0; animation: rise .4s ease both; }
+    .result-source { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+    .source-icon { display: grid; place-items: center; flex: 0 0 auto; width: 30px; height: 30px; border-radius: 9px; background: var(--surface-soft); color: var(--brand); font-size: 11px; font-weight: 850; text-transform: uppercase; }
+    .source-copy { min-width: 0; }
+    .source-host { color: var(--ink); font-size: 13px; }
+    .source-url { overflow: hidden; color: var(--muted); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+    .result-title { display: inline-block; max-width: 100%; margin: 0 0 6px; color: var(--brand); font-size: 21px; font-weight: 650; line-height: 1.3; letter-spacing: -.018em; text-decoration: none; }
+    .result-title:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .result-snippet { display: -webkit-box; max-width: 700px; margin: 0; overflow: hidden; color: color-mix(in srgb, var(--ink) 76%, var(--muted)); font-size: 14px; line-height: 1.62; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+    .coverage { display: inline-block; margin-top: 8px; padding: 3px 7px; border-radius: 6px; color: var(--muted); background: var(--surface-soft); font-size: 11px; }
+    .side-card { position: sticky; top: 112px; align-self: start; padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: color-mix(in srgb, var(--surface) 75%, transparent); box-shadow: var(--shadow-soft); }
+    .side-card h2 { margin: 0 0 10px; font-size: 16px; }
+    .side-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .side-stat { display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; }
+    .state { display: grid; justify-items: start; gap: 10px; padding: 30px 0; }
+    .state h2 { margin: 0; font-size: 22px; }
+    .state p { max-width: 520px; margin: 0; color: var(--muted); line-height: 1.6; }
+    .skeleton { height: 118px; border-radius: 14px; background: linear-gradient(100deg, var(--surface-soft) 30%, color-mix(in srgb, var(--surface) 75%, var(--surface-soft)) 50%, var(--surface-soft) 70%); background-size: 250% 100%; animation: shimmer 1.3s infinite; }
+    footer { position: fixed; left: 0; right: 0; bottom: 0; padding: 14px 20px; color: var(--muted); background: color-mix(in srgb, var(--canvas) 88%, transparent); text-align: center; font-size: 12px; backdrop-filter: blur(12px); }
+    body.results-view footer { position: static; grid-column: 1 / -1; margin-top: 40px; background: transparent; }
+    @keyframes rise { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
+    @keyframes shimmer { to { background-position-x: -250%; } }
+    @media (max-width: 900px) {
+      body.results-view .results-layout { grid-template-columns: 1fr; }
+      .side-card { display: none; }
+    }
+    @media (max-width: 640px) {
+      .topbar { gap: 12px; padding: 10px 12px; min-height: 72px; }
+      .topbar .brand-mark { width: 38px; height: 38px; border-radius: 11px; }
+      .topbar .search-form { border-radius: 16px; box-shadow: var(--shadow-soft); }
+      .topbar .search-button, .topbar .search-symbol { display: none; }
+      .topbar .search-input { height: 42px; font-size: 15px; }
+      .results-layout { width: min(100% - 28px, 760px); padding-top: 22px; }
+      .hero { align-content: start; padding-top: 18vh; }
+      .hero .search-button { padding: 0 16px; }
+      .proof { gap: 18px; }
+      .home-actions { top: 14px; right: 14px; }
+      .result-title { font-size: 19px; }
+      .result-meta { align-items: flex-start; flex-direction: column; gap: 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to results</a>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="A2Z Search home"><span class="brand-mark">A2Z</span><span class="brand-word">A2Z <em>Search</em></span></a>
+    <div class="search-shell"><form class="search-form" id="header-form" role="search"><span class="search-symbol" aria-hidden="true">⌕</span><input class="search-input" id="header-query" type="search" autocomplete="off" aria-label="Search" placeholder="Search A2Z"><button class="search-button">Search</button></form></div>
+    <button class="icon-button theme-toggle" aria-label="Toggle color theme" title="Toggle theme">◐</button>
+  </header>
+
+  <div class="home-actions"><button class="icon-button theme-toggle" aria-label="Toggle color theme" title="Toggle theme">◐</button></div>
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="hero-inner">
+      <a class="brand" href="/" aria-label="A2Z Search home"><span class="brand-mark">A2Z</span><span class="brand-word">A2Z <em>Search</em></span></a>
+      <p class="eyebrow">From question to answer</p>
+      <h1 id="hero-heading">Search the UCI computing universe.</h1>
+      <p class="hero-copy">Fast, focused discovery across more than 51,000 pages—ranked by a search engine built from the ground up.</p>
+      <div class="search-shell"><form class="search-form" id="hero-form" role="search"><span class="search-symbol" aria-hidden="true">⌕</span><input class="search-input" id="hero-query" type="search" autocomplete="off" autofocus aria-label="Search" placeholder="Try “machine learning”"><button class="search-button">Search</button></form></div>
+      <div class="recent" id="recent"></div>
+      <div class="proof"><span><strong>51K+</strong>pages</span><span><strong>1.08M</strong>terms</span><span><strong>&lt;100 ms</strong>warm p99</span></div>
+    </div>
+  </section>
+
+  <main class="results-layout" id="main">
+    <section aria-label="Search results">
+      <div class="result-meta"><div id="status" role="status" aria-live="polite"></div><label>Match mode <select class="mode-select" id="mode"><option value="auto">Smart</option><option value="all">Exact terms</option><option value="any">Broad</option></select></label></div>
+      <div class="results-list" id="results"></div>
+    </section>
+    <aside class="side-card"><h2>About A2Z</h2><p>A privacy-friendly, disk-backed search engine using BM25 ranking, field signals, stemming, and compressed posting lists.</p><div class="side-stat"><span>Index</span><strong>74.5 MB</strong></div><div class="side-stat"><span>Duplicates removed</span><strong>3,913</strong></div></aside>
+    <footer>Built from A to Z — indexing, ranking, and retrieval without a search framework.</footer>
+  </main>
+  <footer id="home-footer">A2Z Search · Local, private, and built from scratch</footer>
+
+  <script>
+    const body = document.body;
+    const results = document.querySelector('#results');
+    const status = document.querySelector('#status');
+    const mode = document.querySelector('#mode');
+    const heroQuery = document.querySelector('#hero-query');
+    const headerQuery = document.querySelector('#header-query');
+    const recent = document.querySelector('#recent');
+    const homeFooter = document.querySelector('#home-footer');
+    const examples = ['machine learning', 'cristina lopes', 'software engineering'];
+
+    const preferredTheme = localStorage.getItem('a2z-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.dataset.theme = preferredTheme;
+    document.querySelectorAll('.theme-toggle').forEach(button => button.addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next; localStorage.setItem('a2z-theme', next);
+    }));
+
+    function savedQueries() { try { return JSON.parse(localStorage.getItem('a2z-recent') || '[]'); } catch { return []; } }
+    function saveQuery(query) { const next = [query, ...savedQueries().filter(item => item.toLowerCase() !== query.toLowerCase())].slice(0, 5); localStorage.setItem('a2z-recent', JSON.stringify(next)); }
+    function renderRecent() {
+      const queries = savedQueries().length ? savedQueries() : examples;
+      recent.replaceChildren();
+      const label = document.createElement('div'); label.className = 'recent-label'; label.textContent = savedQueries().length ? 'Recent searches' : 'Popular searches'; recent.append(label);
+      const chips = document.createElement('div'); chips.className = 'chips';
+      queries.forEach(query => { const button = document.createElement('button'); button.className = 'chip'; button.textContent = query; button.addEventListener('click', () => navigate(query)); chips.append(button); });
+      recent.append(chips);
+    }
+    function sourceInitials(host) { return host.split('.').filter(part => !['www', 'edu', 'com', 'org'].includes(part)).slice(0, 2).map(part => part[0]).join('').toUpperCase() || 'A'; }
+    function showLoading() { results.replaceChildren(...Array.from({length: 5}, () => { const item = document.createElement('div'); item.className = 'skeleton'; return item; })); status.textContent = 'Searching…'; }
+    function showState(title, copy) { results.replaceChildren(); const wrap = document.createElement('div'); wrap.className = 'state'; const heading = document.createElement('h2'); heading.textContent = title; const text = document.createElement('p'); text.textContent = copy; wrap.append(heading, text); results.append(wrap); }
+    function createResult(result, index) {
+      const card = document.createElement('article'); card.className = 'result-card'; card.style.animationDelay = `${Math.min(index * 35, 210)}ms`;
+      const source = document.createElement('div'); source.className = 'result-source';
+      const icon = document.createElement('span'); icon.className = 'source-icon'; icon.textContent = sourceInitials(new URL(result.url).hostname);
+      const sourceCopy = document.createElement('div'); sourceCopy.className = 'source-copy';
+      const host = document.createElement('div'); host.className = 'source-host'; host.textContent = new URL(result.url).hostname;
+      const path = document.createElement('div'); path.className = 'source-url'; path.textContent = result.display_url;
+      sourceCopy.append(host, path); source.append(icon, sourceCopy);
+      const title = document.createElement('a'); title.className = 'result-title'; title.href = result.url; title.target = '_blank'; title.rel = 'noopener'; title.textContent = result.title || new URL(result.url).hostname;
+      const snippet = document.createElement('p'); snippet.className = 'result-snippet'; snippet.textContent = result.snippet || 'Open this page to explore the matching content.';
+      const coverage = document.createElement('span'); coverage.className = 'coverage'; coverage.textContent = `${result.matched_terms}/${result.query_terms} query terms matched`;
+      card.append(source, title, snippet, coverage); return card;
+    }
+    async function search(query, push = true) {
+      query = query.trim(); if (!query) return;
+      body.classList.add('results-view'); homeFooter.hidden = true; headerQuery.value = query; heroQuery.value = query; showLoading(); window.scrollTo({top: 0});
+      if (push) history.pushState({query}, '', `/search?q=${encodeURIComponent(query)}&mode=${mode.value}`);
+      saveQuery(query);
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=10&mode=${mode.value}`);
+        const data = await response.json(); if (!response.ok) throw new Error(data.error || 'Search failed.');
+        status.textContent = `${data.count} results · ${data.elapsed_ms.toFixed(2)} ms`;
+        results.replaceChildren();
+        if (!data.results.length) { showState('No results found', `Try fewer words or switch Match mode to Broad.`); return; }
+        data.results.forEach((result, index) => results.append(createResult(result, index)));
+        document.title = `${query} — A2Z Search`;
+      } catch (error) { status.textContent = 'Search unavailable'; showState('We could not complete that search', error.message || 'Please try again.'); }
+    }
+    function navigate(query) { search(query, true); }
+    document.querySelector('#hero-form').addEventListener('submit', event => { event.preventDefault(); navigate(heroQuery.value); });
+    document.querySelector('#header-form').addEventListener('submit', event => { event.preventDefault(); navigate(headerQuery.value); });
+    mode.addEventListener('change', () => { const query = headerQuery.value.trim(); if (query) search(query, true); });
+    addEventListener('popstate', () => loadFromUrl(false));
+    addEventListener('keydown', event => { if (event.key === '/' && !['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)) { event.preventDefault(); (body.classList.contains('results-view') ? headerQuery : heroQuery).focus(); } });
+    function loadFromUrl(push = false) { const params = new URLSearchParams(location.search); const query = params.get('q'); const selectedMode = params.get('mode'); if (selectedMode && ['auto','all','any'].includes(selectedMode)) mode.value = selectedMode; if (query) search(query, push); else { body.classList.remove('results-view'); homeFooter.hidden = false; document.title = 'A2Z Search'; renderRecent(); } }
+    renderRecent(); loadFromUrl(false);
+  </script>
+</body>
+</html>

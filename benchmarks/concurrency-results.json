@@ -1,0 +1,60 @@
+{
+  "url": "http://127.0.0.1:8765",
+  "results": [
+    {
+      "concurrency": 1,
+      "requests": 100,
+      "successful": 100,
+      "errors": 0,
+      "throughput_qps": 25.63,
+      "median_ms": 36.49,
+      "p95_ms": 54.87,
+      "p99_ms": 89.81,
+      "max_ms": 91.12
+    },
+    {
+      "concurrency": 2,
+      "requests": 100,
+      "successful": 100,
+      "errors": 0,
+      "throughput_qps": 26.13,
+      "median_ms": 75.12,
+      "p95_ms": 117.14,
+      "p99_ms": 167.95,
+      "max_ms": 175.16
+    },
+    {
+      "concurrency": 4,
+      "requests": 100,
+      "successful": 100,
+      "errors": 0,
+      "throughput_qps": 25.93,
+      "median_ms": 147.82,
+      "p95_ms": 235.93,
+      "p99_ms": 294.35,
+      "max_ms": 304.39
+    },
+    {
+      "concurrency": 8,
+      "requests": 100,
+      "successful": 100,
+      "errors": 0,
+      "throughput_qps": 25.62,
+      "median_ms": 304.46,
+      "p95_ms": 431.98,
+      "p99_ms": 503.17,
+      "max_ms": 547.51
+    },
+    {
+      "concurrency": 16,
+      "requests": 100,
+      "successful": 100,
+      "errors": 0,
+      "throughput_qps": 20.67,
+      "median_ms": 413.35,
+      "p95_ms": 2116.68,
+      "p99_ms": 4075.68,
+      "max_ms": 4076.42
+    }
+  ]
+}

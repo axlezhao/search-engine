@@ -1,0 +1,26 @@
+# Broad, narrow, entity, technical, and partially out-of-vocabulary cases.
+cristina lopes
+machine learning
+ACM
+master of software engineering
+information retrieval
+artificial intelligence
+computer vision
+data mining
+software engineering
+distributed systems
+network security
+database systems
+graduate admissions
+undergraduate research
+faculty directory
+course schedule
+Donald Bren School
+UCI informatics
+robotics laboratory
+privacy usable security
+machine learning healthcare
+natural language processing
+quantum computing research
+student academic advising
+impossibleterm computer science

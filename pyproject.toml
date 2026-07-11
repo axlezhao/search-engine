@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uci-disk-search-engine"
+version = "1.2.0"
+description = "A2Z Search: a concurrent, disk-backed search engine and web interface"
+requires-python = ">=3.10"
+dependencies = [
+  "beautifulsoup4>=4.12,<5",
+  "nltk>=3.8,<4",
+]
+
+[project.scripts]
+build-index = "search_engine.indexer:main"
+search-index = "search_engine.search:main"
+benchmark-search = "search_engine.benchmark:main"
+upgrade-index = "search_engine.migrate:main"
+serve-search = "search_engine.server:main"
+benchmark-concurrency = "search_engine.loadtest:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+search_engine = ["web/*.html"]

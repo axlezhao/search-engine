@@ -1,0 +1,186 @@
+{
+  "query_count": 25,
+  "runs_per_query": 5,
+  "mode": "auto",
+  "median_ms": 33.776,
+  "p95_ms": 49.957,
+  "p99_ms": 79.777,
+  "max_ms": 79.932,
+  "queries": [
+    {
+      "query": "cristina lopes",
+      "median_ms": 18.211,
+      "max_ms": 25.593,
+      "result_count": 5,
+      "top_url": "https://www.informatics.uci.edu/explore/faculty-profiles/cristina-lopes/"
+    },
+    {
+      "query": "machine learning",
+      "median_ms": 30.688,
+      "max_ms": 35.66,
+      "result_count": 5,
+      "top_url": "https://cml.ics.uci.edu/2018/03/workshop-for-the-philosophy-of-machine-learning/"
+    },
+    {
+      "query": "ACM",
+      "median_ms": 21.111,
+      "max_ms": 21.194,
+      "result_count": 5,
+      "top_url": "http://sdcl.ics.uci.edu/2013/11/2013-acm-distinguished-scientists/"
+    },
+    {
+      "query": "master of software engineering",
+      "median_ms": 79.601,
+      "max_ms": 79.932,
+      "result_count": 5,
+      "top_url": "https://www.informatics.uci.edu/grad/ms-software-engineering/"
+    },
+    {
+      "query": "information retrieval",
+      "median_ms": 41.749,
+      "max_ms": 47.439,
+      "result_count": 5,
+      "top_url": "https://ngs.ics.uci.edu/multimedia-information-retrieval-at-nus-1/"
+    },
+    {
+      "query": "artificial intelligence",
+      "median_ms": 21.82,
+      "max_ms": 21.881,
+      "result_count": 5,
+      "top_url": "https://ngs.ics.uci.edu/tag/artificial-intelligence/"
+    },
+    {
+      "query": "computer vision",
+      "median_ms": 34.483,
+      "max_ms": 40.533,
+      "result_count": 5,
+      "top_url": "https://www.cs.uci.edu/intel-parallel-universe-computer-vision-for-the-masses-bringing-computer-vision-to-the-open-web-platform/"
+    },
+    {
+      "query": "data mining",
+      "median_ms": 29.729,
+      "max_ms": 34.665,
+      "result_count": 5,
+      "top_url": "https://ngs.ics.uci.edu/data-mining/"
+    },
+    {
+      "query": "software engineering",
+      "median_ms": 34.534,
+      "max_ms": 39.375,
+      "result_count": 5,
+      "top_url": "https://www.informatics.uci.edu/undergrad/bs-software-engineering/"
+    },
+    {
+      "query": "distributed systems",
+      "median_ms": 28.978,
+      "max_ms": 33.776,
+      "result_count": 5,
+      "top_url": "https://cradl.ics.uci.edu/globally-distributed-system-developers-their-trust-expectations-and-processes-published-at-cscw-2013/"
+    },
+    {
+      "query": "network security",
+      "median_ms": 24.103,
+      "max_ms": 28.656,
+      "result_count": 5,
+      "top_url": "http://sprout.ics.uci.edu/projects/uwsnwebpage/security_uwsn.html"
+    },
+    {
+      "query": "database systems",
+      "median_ms": 38.78,
+      "max_ms": 43.35,
+      "result_count": 5,
+      "top_url": "https://isg.ics.uci.edu/event/large-scale-and-low-latency-data-distribution-from-database-to-servers/"
+    },
+    {
+      "query": "graduate admissions",
+      "median_ms": 28.538,
+      "max_ms": 32.985,
+      "result_count": 5,
+      "top_url": "https://www.informatics.uci.edu/admissions/graduate-application-process/"
+    },
+    {
+      "query": "undergraduate research",
+      "median_ms": 39.668,
+      "max_ms": 43.877,
+      "result_count": 5,
+      "top_url": "https://www.informatics.uci.edu/professor-ruberg-honored-for-excellence-in-fostering-undergraduate-research/"
+    },
+    {
+      "query": "faculty directory",
+      "median_ms": 31.269,
+      "max_ms": 35.811,
+      "result_count": 5,
+      "top_url": "https://www.stat.uci.edu/faculty/"
+    },
+    {
+      "query": "course schedule",
+      "median_ms": 35.899,
+      "max_ms": 40.685,
+      "result_count": 5,
+      "top_url": "https://www.informatics.uci.edu/grad/upcoming-course-schedule/"
+    },
+    {
+      "query": "Donald Bren School",
+      "median_ms": 30.302,
+      "max_ms": 37.065,
+      "result_count": 5,
+      "top_url": "https://www.ics.uci.edu/about/bren/bren_press.php"
+    },
+    {
+      "query": "UCI informatics",
+      "median_ms": 48.81,
+      "max_ms": 59.444,
+      "result_count": 5,
+      "top_url": "https://www.ics.uci.edu/faculty/faculty_dept?department=Informatics"
+    },
+    {
+      "query": "robotics laboratory",
+      "median_ms": 20.552,
+      "max_ms": 26.687,
+      "result_count": 5,
+      "top_url": "http://archive.ics.uci.edu/ml/datasets/Pioneer-1+Mobile+Robot+Data"
+    },
+    {
+      "query": "privacy usable security",
+      "median_ms": 24.259,
+      "max_ms": 25.968,
+      "result_count": 5,
+      "top_url": "http://sprout.ics.uci.edu/projects.html"
+    },
+    {
+      "query": "machine learning healthcare",
+      "median_ms": 30.938,
+      "max_ms": 37.674,
+      "result_count": 5,
+      "top_url": "https://www.cs.uci.edu/exploiting-iot-for-healthcare/"
+    },
+    {
+      "query": "natural language processing",
+      "median_ms": 30.778,
+      "max_ms": 35.073,
+      "result_count": 5,
+      "top_url": "https://ngs.ics.uci.edu/towards-natural-interfaces/"
+    },
+    {
+      "query": "quantum computing research",
+      "median_ms": 42.168,
+      "max_ms": 49.731,
+      "result_count": 5,
+      "top_url": "https://duttgroup.ics.uci.edu/projects/self-aware-adaptive-computing/memory-adaptation/"
+    },
+    {
+      "query": "student academic advising",
+      "median_ms": 35.993,
+      "max_ms": 41.44,
+      "result_count": 5,
+      "top_url": "https://www.ics.uci.edu/ugrad/advising/New%20Transfer%20Students.php"
+    },
+    {
+      "query": "impossibleterm computer science",
+      "median_ms": 45.72,
+      "max_ms": 46.167,
+      "result_count": 5,
+      "top_url": "https://www.ics.uci.edu/faculty/faculty_dept?department=Computer%20Science"
+    }
+  ]
+}
